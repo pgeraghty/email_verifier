@@ -4,7 +4,9 @@ module EmailVerifier
   require 'email_verifier/checker'
   require 'email_verifier/exceptions'
   require 'email_verifier/config'
-  require "email_verifier/validates_email_realness"
+  if defined?(ActiveRecord)
+    require "email_verifier/validates_email_realness"
+  end
 
   if defined?(Rails::Railtie)
     class Railtie < ::Rails::Railtie #:nodoc:
