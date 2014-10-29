@@ -40,7 +40,11 @@ class EmailVerifier::Checker
     begin
       server = next_server
       raise EmailVerifier::OutOfMailServersException.new("Unable to connect to any one of mail servers for #{@email}") if server.nil?
-      @smtp = Net::SMTP.start server[:address], 25, @user_domain
+      
+      @smtp = Net::SMTP.new server[:address]
+      @smtp.enable_starttls_auto
+      @smtp.start @user_domain
+      
       return true
     rescue EmailVerifier::OutOfMailServersException => e
       raise EmailVerifier::OutOfMailServersException, e.message
